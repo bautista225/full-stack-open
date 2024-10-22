@@ -4,13 +4,7 @@ const Header = (header) => {
   )
 }
 
-const Part = (part) => {
-  return (
-    <p>
-      {part.name} {part.exercises}
-    </p>
-  )
-}
+const Part = ({name, exercises}) => <p>{name} {exercises}</p>
 
 const Content = (content) => {
   const parts = content.parts
