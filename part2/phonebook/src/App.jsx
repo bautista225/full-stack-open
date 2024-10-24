@@ -1,15 +1,16 @@
 import { useState, useEffect } from 'react'
-import axios from 'axios'
 import Persons from './components/Persons'
 import PersonForm from './components/PersonForm'
 import Filter from './components/Filter'
 import personsService from './services/persons'
+import Notification from './components/Notification'
 
 const App = () => {
   const [persons, setPersons] = useState([])
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [newSearch, setNewSearch] = useState('')
+  const [notification, setNotification] = useState(null)
 
   useEffect(() => {
     personsService.getAll().then(initialPersons => {
@@ -20,6 +21,11 @@ const App = () => {
   const handleSearchChange = (event) => setNewSearch(event.target.value)
   const handleNameChange = (event) => setNewName(event.target.value)
   const handleNumberChange = (event) => setNewNumber(event.target.value)
+
+  const notifyMessage = (message, type='success') => {
+    setNotification({message, type})
+    setTimeout(() => setNotification(null), 5000)
+  }
 
   const checkPersonExist = (newPerson) => {
     const matchedPersons = persons.filter(person => person.name === newPerson.name)
@@ -38,6 +44,10 @@ const App = () => {
     
     personsService.create(newPerson).then(createdPerson => {
       setPersons([...persons, createdPerson])
+      notifyMessage(`Added ${createdPerson.name}`)
+    })
+    .catch(error => {
+      notifyMessage(`${error.message} - ${error.response?.data}`, 'error')
     })
 
     setNewName('')
@@ -50,8 +60,19 @@ const App = () => {
 
     const existingPerson = persons.filter(person => person.name === newPerson.name)[0]
 
-    personsService.update(existingPerson.id, newPerson).then(updatedPerson => {
-      setPersons([...persons.filter(person => person.id !== updatedPerson.id), updatedPerson])
+    personsService.update(existingPerson.id, newPerson)
+    .then(updatedPerson => {
+      setPersons(prevPersons => prevPersons.filter(person => person.id === updatedPerson.id? updatedPerson : person))
+      notifyMessage(`Updated number for ${updatedPerson.name}`)
+    })
+    .catch(error => {
+      if (error.response?.status === 404){        
+        setPersons(prevPersons => prevPersons.filter(person => person.id !== existingPerson.id))
+        notifyMessage(`Information of ${existingPerson.name} has already been removed from server`, 'error')
+      }
+      else {
+        notifyMessage(`${error.message} - ${error.response?.data}`, 'error')
+      }
     })
 
     setNewName('')
@@ -61,14 +82,20 @@ const App = () => {
   const deletePerson = (person) => {
     if (!window.confirm(`Delete ${person.name} ?`)) return
 
-    personsService.remove(person.id).then(deletedPerson => {
+    personsService.remove(person.id)
+    .then(deletedPerson => {
       setPersons(persons.filter(person => person.id !== deletedPerson.id))
+      notifyMessage(`Deleted ${deletedPerson.name}`)
+    })
+    .catch(error => {
+      notifyMessage(`${error.message} - ${error.response?.data}`, 'error')
     })
   }
 
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification notification={notification} />
       <Filter newSearch={newSearch} handleSearchChange={handleSearchChange} />
       <h3>add a new</h3>
       <PersonForm newName={newName} newNumber={newNumber} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} addNewPerson={addNewPerson} />
