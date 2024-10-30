@@ -62,7 +62,7 @@ const App = () => {
 
     personsService.update(existingPerson.id, newPerson)
     .then(updatedPerson => {
-      setPersons(prevPersons => prevPersons.filter(person => person.id === updatedPerson.id? updatedPerson : person))
+      setPersons(prevPersons => prevPersons.map(person => person.id === updatedPerson.id? updatedPerson : person))
       notifyMessage(`Updated number for ${updatedPerson.name}`)
     })
     .catch(error => {
