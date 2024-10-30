@@ -54,6 +54,7 @@ app.get('/api/persons', (request, response) => {
 })
 
 app.get('/api/persons/:id', (request, response) => {
+
     const id = Number(request.params.id)
     const person = persons.find(person => person.id === id)
 
@@ -77,10 +78,11 @@ app.post('/api/persons', (request, response) => {
 
     Person.find({name: body.name}).then(persons => {
         response.json(persons)
-        mongoose.connection.close()
                 
-        if (persons.length)
+        if (persons.length) {
+            mongoose.connection.close()
             return response.status(400).json({ error: 'name must be unique' })
+        }
 
         const newPerson = new Person({
             name: body.name,
