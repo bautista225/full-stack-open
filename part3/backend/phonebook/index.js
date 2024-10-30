@@ -42,26 +42,22 @@ app.get('/info', (request, response) => {
     Person.find({}).then(persons => {
         number_of_persons = persons.length
         response.send(`<p>Phonebook has info for ${number_of_persons} people</p><p>${new Date()}</p>`)
-        mongoose.connection.close()        
+        mongoose.connection.close()
     })
 })
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
         response.json(persons)
-        mongoose.connection.close()        
+        mongoose.connection.close()
     })
 })
 
 app.get('/api/persons/:id', (request, response) => {
-
-    const id = Number(request.params.id)
-    const person = persons.find(person => person.id === id)
-
-    if (person)
-        response.json(person)
-    else
-        response.status(404).end()
+    Person.findById(request.params.id).then(note => {
+        response.json(note)
+        mongoose.connection.close()
+    })
 })
 
 app.post('/api/persons', (request, response) => {
@@ -76,7 +72,7 @@ app.post('/api/persons', (request, response) => {
     if (!body.number)
         return response.status(400).json({ error: 'number missing' })
 
-    Person.find({name: body.name}).then(persons => {                
+    Person.find({ name: body.name }).then(persons => {
         if (persons.length) {
             mongoose.connection.close()
             return response.status(400).json({ error: 'name must be unique' })
