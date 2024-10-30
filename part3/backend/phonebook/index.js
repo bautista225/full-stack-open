@@ -2,6 +2,8 @@ const express = require('express')
 const morgan = require('morgan')
 morgan.token('body', function (req, res) { return JSON.stringify(req.body) })
 const cors = require('cors')
+const mongoose = require('mongoose')
+const Person = require('./models/person')
 
 const app = express()
 app.use(cors())
@@ -37,12 +39,18 @@ app.get('/', (request, response) => {
 })
 
 app.get('/info', (request, response) => {
-    number_of_persons = persons.length
-    response.send(`<p>Phonebook has info for ${number_of_persons} people</p><p>${new Date()}</p>`)
+    Person.find({}).then(persons => {
+        number_of_persons = persons.length
+        response.send(`<p>Phonebook has info for ${number_of_persons} people</p><p>${new Date()}</p>`)
+        mongoose.connection.close()        
+    })
 })
 
 app.get('/api/persons', (request, response) => {
-    response.json(persons)
+    Person.find({}).then(persons => {
+        response.json(persons)
+        mongoose.connection.close()        
+    })
 })
 
 app.get('/api/persons/:id', (request, response) => {
@@ -54,17 +62,6 @@ app.get('/api/persons/:id', (request, response) => {
     else
         response.status(404).end()
 })
-
-const generateId = () => {
-    const max = 1000000
-    const min = 1
-    let newId = Math.floor(Math.random() * (max - min) + min)
-
-    while (persons.find(person => person.id === newId))
-        newId = Math.floor(Math.random() * (max - min) + min)
-
-    return newId
-}
 
 app.post('/api/persons', (request, response) => {
     const body = request.body
@@ -78,18 +75,23 @@ app.post('/api/persons', (request, response) => {
     if (!body.number)
         return response.status(400).json({ error: 'number missing' })
 
-    if (persons.find(person => person.name === body.name))
-        return response.status(400).json({ error: 'name must be unique' })
+    Person.find({name: body.name}).then(persons => {
+        response.json(persons)
+        mongoose.connection.close()
+                
+        if (persons.length)
+            return response.status(400).json({ error: 'name must be unique' })
 
-    const person = {
-        name: body.name,
-        number: body.number,
-        id: generateId(),
-    }
+        const newPerson = new Person({
+            name: body.name,
+            number: body.number,
+        })
 
-    persons = persons.concat(person)
-
-    response.json(person)
+        newPerson.save().then(person => {
+            response.json(person)
+            mongoose.connection.close()
+        })
+    })
 })
 
 app.delete('/api/persons/:id', (request, response) => {
