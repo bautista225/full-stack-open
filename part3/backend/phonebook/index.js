@@ -74,7 +74,6 @@ app.post('/api/persons', (request, response) => {
 
     Person.find({ name: body.name }).then(persons => {
         if (persons.length) {
-            mongoose.connection.close()
             return response.status(400).json({ error: 'name must be unique' })
         }
 
@@ -87,6 +86,8 @@ app.post('/api/persons', (request, response) => {
             response.json(person)
             mongoose.connection.close()
         })
+        
+        mongoose.connection.close()
     })
 })
 
