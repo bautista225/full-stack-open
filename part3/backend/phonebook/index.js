@@ -42,21 +42,18 @@ app.get('/info', (request, response) => {
     Person.find({}).then(persons => {
         number_of_persons = persons.length
         response.send(`<p>Phonebook has info for ${number_of_persons} people</p><p>${new Date()}</p>`)
-        mongoose.connection.close()
     })
 })
 
 app.get('/api/persons', (request, response) => {
     Person.find({}).then(persons => {
         response.json(persons)
-        mongoose.connection.close()
     })
 })
 
 app.get('/api/persons/:id', (request, response) => {
     Person.findById(request.params.id).then(note => {
         response.json(note)
-        mongoose.connection.close()
     })
 })
 
@@ -84,10 +81,7 @@ app.post('/api/persons', (request, response) => {
 
         newPerson.save().then(person => {
             response.json(person)
-            mongoose.connection.close()
         })
-        
-        mongoose.connection.close()
     })
 })
 
