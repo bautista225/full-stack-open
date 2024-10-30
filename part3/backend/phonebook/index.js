@@ -76,9 +76,7 @@ app.post('/api/persons', (request, response) => {
     if (!body.number)
         return response.status(400).json({ error: 'number missing' })
 
-    Person.find({name: body.name}).then(persons => {
-        response.json(persons)
-                
+    Person.find({name: body.name}).then(persons => {                
         if (persons.length) {
             mongoose.connection.close()
             return response.status(400).json({ error: 'name must be unique' })
