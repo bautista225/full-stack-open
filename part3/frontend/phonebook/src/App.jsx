@@ -38,7 +38,7 @@ const App = () => {
       name: newName,
       number: newNumber,
     }
-
+    
     if (checkPersonExist(newPerson))
       return updatePerson(newPerson)
     
@@ -47,7 +47,7 @@ const App = () => {
       notifyMessage(`Added ${createdPerson.name}`)
     })
     .catch(error => {
-      notifyMessage(`${error.message} - ${error.response?.data}`, 'error')
+      notifyMessage(`${error.message} - ${error.response?.data.error}`, 'error')
     })
 
     setNewName('')
@@ -71,7 +71,7 @@ const App = () => {
         notifyMessage(`Information of ${existingPerson.name} has already been removed from server`, 'error')
       }
       else {
-        notifyMessage(`${error.message} - ${error.response?.data}`, 'error')
+        notifyMessage(`${error.message} - ${error.response?.data.error}`, 'error')
       }
     })
 
