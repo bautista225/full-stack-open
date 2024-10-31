@@ -1,14 +1,13 @@
 const express = require('express')
 const morgan = require('morgan')
 const cors = require('cors')
-const mongoose = require('mongoose')
 const Person = require('./models/person')
 
 const app = express()
 app.use(cors())
 app.use(express.static('dist'))
 app.use(express.json())
-morgan.token('body', (req, res) => JSON.stringify(req.body))
+morgan.token('body', (req) => JSON.stringify(req.body))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :body'))
 
 app.get('/', (request, response) => {
@@ -18,7 +17,7 @@ app.get('/', (request, response) => {
 app.get('/info', (request, response, next) => {
     Person.find({})
         .then(persons => {
-            number_of_persons = persons.length
+            const number_of_persons = persons.length
             response.send(`<p>Phonebook has info for ${number_of_persons} people</p><p>${new Date()}</p>`)
         })
         .catch(error => next(error))
@@ -81,8 +80,8 @@ app.put('/api/persons/:id', (request, response, next) => {
     const person = { name, number }
 
     Person.findByIdAndUpdate(
-        request.params.id, 
-        person, 
+        request.params.id,
+        person,
         { new: true, runValidators: true }
     )
         .then(updatedPerson => {
@@ -93,7 +92,7 @@ app.put('/api/persons/:id', (request, response, next) => {
 
 app.delete('/api/persons/:id', (request, response, next) => {
     Person.findByIdAndDelete(request.params.id)
-        .then(result => {
+        .then(() => {
             response.status(204).end()
         })
         .catch(error => next(error))
