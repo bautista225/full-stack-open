@@ -1,0 +1,8 @@
+# EditorConfig configuration
+root = true
+
+
+# Con esta configuración, VS Code automáticamente aplicará LF en todos los archivos cuando los guardes. 
+# Necesario para que funcione el ESlint correctamente, de otra manera se queja de que los saltos de línea son CRLF.
+[*]
+end_of_line = lf

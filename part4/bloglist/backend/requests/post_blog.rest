@@ -1,0 +1,50 @@
+# Petición vacía
+POST http://localhost:3001/api/blogs
+
+###
+# Petición solo título
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-type: application/json
+
+{
+    "title": "Hola mundo"
+}
+
+###
+# Petición solo autor
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-type: application/json
+
+{
+    "author": "Juan Bautista"
+}
+
+###
+# Petición solo url
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-type: application/json
+
+{
+    "url": "https://github.com/bautista225",
+}
+
+###
+# Petición solo likes
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-type: application/json
+
+{
+    "likes": 33,
+}
+
+###
+# Petición completa
+POST http://localhost:3001/api/blogs/ HTTP/1.1
+Content-type: application/json
+
+{
+    "title": "Hola mundo",
+    "author": "Juan Bautista",
+    "url": "https://github.com/bautista225",
+    "likes": 33
+}

@@ -1,0 +1,27 @@
+{
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "backend of bloglist project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "dev": "nodemon index.js",
+    "lint": "eslint .",
+    "test": "node --test"
+  },
+  "author": "Juan Bautista",
+  "license": "ISC",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "express": "^4.21.1",
+    "lodash": "^4.17.21",
+    "mongoose": "^8.7.3",
+    "morgan": "^1.10.0"
+  },
+  "devDependencies": {
+    "@stylistic/eslint-plugin-js": "^1.6.1",
+    "eslint": "^8.56.0",
+    "nodemon": "^3.1.7"
+  }
+}
