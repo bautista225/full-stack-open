@@ -43,10 +43,10 @@ describe('when there is initially some blogs saved', () => {
     describe('addition of a new blog', () => {
         test('succeeds with valid data', async () => {
             const newBlog = {
-                "title": "Adding Hola mundo",
-                "author": "Juan Bautista",
-                "url": "https://github.com/bautista225",
-                "likes": 33
+                'title': 'Adding Hola mundo',
+                'author': 'Juan Bautista',
+                'url': 'https://github.com/bautista225',
+                'likes': 33
             }
 
             await api
@@ -63,9 +63,9 @@ describe('when there is initially some blogs saved', () => {
 
         test('without likes property, saves the property equal to 0', async () => {
             const newBlog = {
-                "title": "Hola mundo sin likes",
-                "author": "Juan Bautista",
-                "url": "https://github.com/bautista225",
+                'title': 'Hola mundo sin likes',
+                'author': 'Juan Bautista',
+                'url': 'https://github.com/bautista225',
             }
 
             await api
@@ -82,9 +82,9 @@ describe('when there is initially some blogs saved', () => {
 
         test('without title is not added, failing with status code 400', async () => {
             const newBlog = {
-                "author": "Juan Bautista",
-                "url": "https://github.com/bautista225",
-                "likes": 33
+                'author': 'Juan Bautista',
+                'url': 'https://github.com/bautista225',
+                'likes': 33
             }
 
             await api
@@ -99,9 +99,9 @@ describe('when there is initially some blogs saved', () => {
 
         test('without url is not added, failing with status code 400', async () => {
             const newBlog = {
-                "title": "Hola mundo",
-                "author": "Juan Bautista",
-                "likes": 33
+                'title': 'Hola mundo',
+                'author': 'Juan Bautista',
+                'likes': 33
             }
 
             await api
