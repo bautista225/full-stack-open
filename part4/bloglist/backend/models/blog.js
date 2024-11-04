@@ -18,7 +18,7 @@ const blogSchema = new Schema({
     },
     likes: {
         type: Number,
-        required: [true, 'Likes required']
+        default: 0
     },
 })
 
