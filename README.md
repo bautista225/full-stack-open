@@ -41,7 +41,7 @@ Development and deployment of a RESTful backend for the phonebook SPA made in pa
 
 ### [Part 4 - Testing Express servers, user administration](/part4/)
 
-The first major theme will be writing unit and integration tests for the backend. After that, user authentication and authorization is implemented.
+The first major theme will be writing unit and integration tests for the backend. User authentication and authorization based on tokens is also implemented within a TDD approach.
 
 - [bloglist](/part4/bloglist/): Development of a application of list of blogs, that allows users to save information about interesting blogs found on internet. For each listed blog: author, title, url and quantity of positive votes will be saved.
 
