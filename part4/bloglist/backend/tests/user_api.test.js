@@ -1,9 +1,10 @@
 const bcrypt = require('bcryptjs')
 const User = require('../models/user')
 
-const { test, beforeEach, describe } = require('node:test')
+const { test, beforeEach, describe, after } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
+const mongoose = require('mongoose')
 const app = require('../app')
 const api = supertest(app)
 
@@ -56,9 +57,98 @@ describe('when there is initially one user in db', () => {
             .expect(400)
             .expect('Content-Type', /application\/json/)
 
-        const usersAtEnd = await helper.usersInDb()
         assert(result.body.error.includes('expected `username` to be unique'))
 
+        const usersAtEnd = await helper.usersInDb()
         assert.strictEqual(usersAtEnd.length, usersAtStart.length)
     })
+})
+
+describe('when adding more users in db', () => {
+    test('creation of user with a username with length shorter than 3 fails', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'fs',
+            name: 'Full Stack User',
+            password: 'fullstackopen',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        assert(result.body.error.includes('shorter than the minimum allowed length (3)'))
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation of user with a password with length shorter than 3 fails', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'fullstackuser',
+            name: 'Full Stack User',
+            password: 'fo',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        assert(result.body.error.includes('password` is not valid'))
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation of user without password fails', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'fullstackuser',
+            name: 'Full Stack User',
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        assert(result.body.error.includes('password` is not valid'))
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+
+    test('creation of user with a password that is not a String fails', async () => {
+        const usersAtStart = await helper.usersInDb()
+
+        const newUser = {
+            username: 'fullstackuser',
+            name: 'Full Stack User',
+            password: 1234,
+        }
+
+        const result = await api
+            .post('/api/users')
+            .send(newUser)
+            .expect(400)
+            .expect('Content-Type', /application\/json/)
+
+        assert(result.body.error.includes('password` is not valid'))
+
+        const usersAtEnd = await helper.usersInDb()
+        assert.strictEqual(usersAtEnd.length, usersAtStart.length)
+    })
+})
+
+after(async () => {
+    await mongoose.connection.close()
 })

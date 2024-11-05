@@ -1,3 +1,5 @@
+const config = require('../utils/config')
+
 const { test, after, beforeEach, describe } = require('node:test')
 const assert = require('node:assert')
 const supertest = require('supertest')
@@ -46,11 +48,12 @@ describe('when there is initially some blogs saved', () => {
                 'title': 'Adding Hola mundo',
                 'author': 'Juan Bautista',
                 'url': 'https://github.com/bautista225',
-                'likes': 33
+                'likes': 33,
             }
 
             await api
                 .post(mainUrlAPI)
+                .set('Authorization', `Bearer ${config.USER_TOKEN}`)
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -70,6 +73,7 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .post(mainUrlAPI)
+                .set('Authorization', `Bearer ${config.USER_TOKEN}`)
                 .send(newBlog)
                 .expect(201)
                 .expect('Content-Type', /application\/json/)
@@ -89,6 +93,7 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .post(mainUrlAPI)
+                .set('Authorization', `Bearer ${config.USER_TOKEN}`)
                 .send(newBlog)
                 .expect(400)
 
@@ -106,13 +111,31 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .post(mainUrlAPI)
+                .set('Authorization', `Bearer ${config.USER_TOKEN}`)
                 .send(newBlog)
                 .expect(400)
 
             const blogsAtEnd = await helper.blogsInDb()
 
             assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
+        })
 
+        test('without token fails with status 401 Unauthorized and `token invalid` error message', async () => {
+            const newBlog = {
+                'title': 'Hola mundo',
+                'author': 'Juan Bautista',
+                'likes': 33
+            }
+
+            const result = await api
+                .post(mainUrlAPI)
+                .send(newBlog)
+                .expect(401)
+
+            assert(result.body.error.includes('token invalid'))
+
+            const blogsAtEnd = await helper.blogsInDb()
+            assert.strictEqual(blogsAtEnd.length, helper.initialBlogs.length)
         })
     })
 
@@ -123,6 +146,7 @@ describe('when there is initially some blogs saved', () => {
 
             await api
                 .delete(`${mainUrlAPI}/${blogToDelete.id}`)
+                .set('Authorization', `Bearer ${config.USER_TOKEN}`)
                 .expect(204)
 
             const blogsAtEnd = await helper.blogsInDb()
