@@ -13,16 +13,29 @@ const unknownEndpoint = (request, response) => {
     response.status(404).send({ error: 'unknown endpoint' })
 }
 
-const errorHandler = (error, request, response, next) => {
+const ERROR_HANDLERS = {
+    defaultError: (response, error) => {
+        console.error(error.name)
+        response.status(500).end()
+    },
+    CastError: response =>
+        response.status(400).send({ error: 'malformatted id' }),
+    ValidationError: (response, error) =>
+        response.status(400).json({ error: error.message }),
+    MongoServerError: (response, error) => {
+        if (error.message.includes('E11000 duplicate key error'))
+            return response.status(400).json({ error: 'expected `username` to be unique' })
+        else
+            return ERROR_HANDLERS.defaultError
+    }
+}
+
+const errorHandler = (error, request, response) => {
     logger.error(error.message)
 
-    if (error.name === 'CastError')
-        return response.status(400).send({ error: 'malformatted id' })
+    const errorHandler = ERROR_HANDLERS[error.name] || ERROR_HANDLERS.defaultError
 
-    if (error.name === 'ValidationError')
-        return response.status(400).json({ error: error.message })
-
-    next(error)
+    errorHandler(error, response)
 }
 
 module.exports = {
