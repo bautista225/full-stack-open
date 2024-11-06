@@ -45,9 +45,11 @@ The first major theme will be writing unit and integration tests for the backend
 
 - [bloglist](/part4/bloglist/): Development of a backend application of list of blogs, that allows users to save information about interesting blogs found on internet. For each listed blog: author, title, url and quantity of positive votes will be saved.
 
-### Part 5 - Testing React apps
+### [Part 5 - Testing React apps](/part5/)
 
 In this part the unit tests are applied to the React frontend. User authentication and authorization module is also developed and implemented on the frontend to allow user login on the app.
+
+- [bloglist](/part5/bloglist/): Development of the frontend for the backend implemented in part4 with login functionality and unit testing.
 
 ### Part 6 - Advanced state management
 ### Part 7 - React router, custom hooks, styling app with CSS and webpack
