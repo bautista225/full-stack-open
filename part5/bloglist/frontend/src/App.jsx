@@ -6,11 +6,10 @@ import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
 import Togglable from './components/Togglable'
+import UserInfo from './components/UserInfo'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
-    const [username, setUsername] = useState('')
-    const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
     const [notification, setNotification] = useState(null)
     const blogFormRef = useRef()
@@ -33,29 +32,21 @@ const App = () => {
         setTimeout(() => setNotification(null), 5000)
     }
 
-    const handleLogin = async (event) => {
-        event.preventDefault()
-
+    const executeUserLogin = async (userCredentials) => {
         try {
-            const user = await loginService.login({
-                username, password,
-            })
+            const user = await loginService.login(userCredentials)
 
             window.localStorage.setItem(
                 'loggedBlogappUser', JSON.stringify(user)
             )
             blogService.setToken(user.token)
             setUser(user)
-            setUsername('')
-            setPassword('')
         } catch (exception) {
             notifyMessage('wrong username or password', 'error')
         }
     }
 
-    const handleLogout = (event) => {
-        event.preventDefault()
-
+    const executeUserLogout = () => {
         window.localStorage.removeItem('loggedBlogappUser')
         setUser(null)
     }
@@ -104,10 +95,7 @@ const App = () => {
             <div>
                 <h2>Log in to application</h2>
                 <Notification notification={notification} />
-                <LoginForm username={username} password={password} handleLogin={handleLogin}
-                    handleUsernameChange={({ target }) => setUsername(target.value)}
-                    handlePasswordChange={({ target }) => setPassword(target.value)}
-                />
+                <LoginForm executeUserLogin={executeUserLogin} />
             </div>
         )
 
@@ -115,9 +103,7 @@ const App = () => {
         <div>
             <h2>blogs</h2>
             <Notification notification={notification} />
-            <div>
-                {user.name} logged in<button onClick={handleLogout}>logout</button>
-            </div>
+            <UserInfo name={user.name} executeUserLogout={executeUserLogout}/>
             <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
                 <CreateBlogForm createBlog={addNewBlog} />
             </Togglable>
