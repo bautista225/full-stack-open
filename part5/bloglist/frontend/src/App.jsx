@@ -1,10 +1,11 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+import blogService from './services/blogs'
+import loginService from './services/login'
 import Blog from './components/Blog'
 import LoginForm from './components/LoginForm'
 import CreateBlogForm from './components/CreateBlogForm'
 import Notification from './components/Notification'
-import blogService from './services/blogs'
-import loginService from './services/login'
+import Togglable from './components/Togglable'
 
 const App = () => {
     const [blogs, setBlogs] = useState([])
@@ -12,9 +13,7 @@ const App = () => {
     const [password, setPassword] = useState('')
     const [user, setUser] = useState(null)
     const [notification, setNotification] = useState(null)
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+    const blogFormRef = useRef()
 
     useEffect(() => {
         blogService.getAll().then(blogs => setBlogs(blogs))
@@ -61,24 +60,42 @@ const App = () => {
         setUser(null)
     }
 
-    const handleCreateBlog = async (event) => {
-        event.preventDefault()
-
+    const addNewBlog = async (blogObject) => {
         try {
-            const blog = await blogService.create({
-                title,
-                author,
-                url
-            })
+            const blog = await blogService.create(blogObject)
             
-            setTitle('')
-            setAuthor('')
-            setUrl('')
+            blogFormRef.current.toggleVisibility()
             setBlogs(blogs.concat(blog))
             
             notifyMessage(`a new blog ${blog.title} by ${blog.author} added`)
         } catch (exception) {
-            notifyMessage('Addition of the blog has failed', 'error')
+            notifyMessage(`Addition of the blog has failed: ${exception.message}`, 'error')
+        }
+    }
+
+    const updateBlog = async (blogObject) => {
+        try {
+            const updatedBlog = await blogService.update(blogObject)
+            updatedBlog.user = blogObject.user
+            setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
+            
+            notifyMessage(` ${updatedBlog.title} by ${updatedBlog.author} updated`)
+        } catch (exception) {
+            notifyMessage(`Updating the blog has failed: ${exception.message}`, 'error')
+        }
+    }
+
+    const removeBlog = async (blogObject) => {
+        if (!window.confirm(`Remove ${blogObject.title} by ${blogObject.author}`))
+            return
+
+        try {
+            await blogService.remove(blogObject)
+            setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
+            
+            notifyMessage(` ${blogObject.title} by ${blogObject.author} removed`)
+        } catch (exception) {
+            notifyMessage(`Removing the blog has failed: ${exception.message}`, 'error')
         }
     }
 
@@ -101,15 +118,15 @@ const App = () => {
             <div>
                 {user.name} logged in<button onClick={handleLogout}>logout</button>
             </div>
-            <CreateBlogForm title={title} author={author} url={url} handleCreateBlog={handleCreateBlog}
-                handleTitleChange={({ target }) => setTitle(target.value)}
-                handleAuthorChange={({ target }) => setAuthor(target.value)}
-                handleUrlChange={({ target }) => setUrl(target.value)}
-            />
+            <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
+                <CreateBlogForm createBlog={addNewBlog} />
+            </Togglable>
             <div>
-                {blogs.map(blog =>
-                    <Blog key={blog.id} blog={blog} />
-                )}
+                {blogs
+                    .sort((blogA, blogB) => blogA.likes - blogB.likes)
+                    .reverse()
+                    .map(blog => 
+                        <Blog updateBlog={updateBlog} key={blog.id} blog={blog} user={user} removeBlog={removeBlog}/>)}
             </div>
         </div>
     )
