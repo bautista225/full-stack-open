@@ -2,7 +2,7 @@ import { useState } from 'react'
 
 const Blog = ({ blog, updateBlog, user, removeBlog }) => {
     const [visible, setVisible] = useState(false)
-    
+
     const showWhenVisible = { display: visible ? '' : 'none' }
     const hideWhenVisible = { display: visible ? 'none' : '' }
     const showWhenUserIsOwner = { display: user.username === blog.user.username ? '' : 'none' }
@@ -20,7 +20,7 @@ const Blog = ({ blog, updateBlog, user, removeBlog }) => {
     }
 
     const addLike = () => {
-        const newBlog = { ...blog, likes: blog.likes + 1 };
+        const newBlog = { ...blog, likes: blog.likes + 1 }
         updateBlog(newBlog)
     }
 

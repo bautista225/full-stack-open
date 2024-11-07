@@ -63,10 +63,10 @@ const App = () => {
     const addNewBlog = async (blogObject) => {
         try {
             const blog = await blogService.create(blogObject)
-            
+
             blogFormRef.current.toggleVisibility()
             setBlogs(blogs.concat(blog))
-            
+
             notifyMessage(`a new blog ${blog.title} by ${blog.author} added`)
         } catch (exception) {
             notifyMessage(`Addition of the blog has failed: ${exception.message}`, 'error')
@@ -78,7 +78,7 @@ const App = () => {
             const updatedBlog = await blogService.update(blogObject)
             updatedBlog.user = blogObject.user
             setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
-            
+
             notifyMessage(` ${updatedBlog.title} by ${updatedBlog.author} updated`)
         } catch (exception) {
             notifyMessage(`Updating the blog has failed: ${exception.message}`, 'error')
@@ -92,7 +92,7 @@ const App = () => {
         try {
             await blogService.remove(blogObject)
             setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
-            
+
             notifyMessage(` ${blogObject.title} by ${blogObject.author} removed`)
         } catch (exception) {
             notifyMessage(`Removing the blog has failed: ${exception.message}`, 'error')
@@ -125,8 +125,8 @@ const App = () => {
                 {blogs
                     .sort((blogA, blogB) => blogA.likes - blogB.likes)
                     .reverse()
-                    .map(blog => 
-                        <Blog updateBlog={updateBlog} key={blog.id} blog={blog} user={user} removeBlog={removeBlog}/>)}
+                    .map(blog =>
+                        <Blog updateBlog={updateBlog} key={blog.id} blog={blog} user={user} removeBlog={removeBlog} />)}
             </div>
         </div>
     )
