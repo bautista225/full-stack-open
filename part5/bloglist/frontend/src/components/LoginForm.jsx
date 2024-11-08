@@ -24,6 +24,7 @@ const LoginForm = ({ executeUserLogin }) => {
                     type="text"
                     value={username}
                     name="Username"
+                    placeholder='Username'
                     onChange={({ target }) => setUsername(target.value)}
                 />
             </div>
@@ -33,6 +34,7 @@ const LoginForm = ({ executeUserLogin }) => {
                     type="password"
                     value={password}
                     name="Password"
+                    placeholder='Password'
                     onChange={({ target }) => setPassword(target.value)}
                 />
             </div>

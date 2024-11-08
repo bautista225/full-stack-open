@@ -70,7 +70,7 @@ const App = () => {
             updatedBlog.user = blogObject.user
             setBlogs(blogs.map(blog => blog.id === updatedBlog.id ? updatedBlog : blog))
 
-            notifyMessage(` ${updatedBlog.title} by ${updatedBlog.author} updated`)
+            notifyMessage(`${updatedBlog.title} by ${updatedBlog.author} updated`)
         } catch (exception) {
             notifyMessage(`Updating the blog has failed: ${exception.message}`, 'error')
         }
@@ -84,7 +84,7 @@ const App = () => {
             await blogService.remove(blogObject)
             setBlogs(blogs.filter(blog => blog.id !== blogObject.id))
 
-            notifyMessage(` ${blogObject.title} by ${blogObject.author} removed`)
+            notifyMessage(`${blogObject.title} by ${blogObject.author} removed`)
         } catch (exception) {
             notifyMessage(`Removing the blog has failed: ${exception.message}`, 'error')
         }

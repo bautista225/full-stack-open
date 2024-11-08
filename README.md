@@ -47,7 +47,9 @@ The first major theme will be writing unit and integration tests for the backend
 
 ### [Part 5 - Testing React apps](/part5/)
 
-In this part the unit tests are applied to the React frontend. User authentication and authorization module is also developed and implemented on the frontend to allow user login on the app.
+In this part the integration tests are applied to the React frontend. User authentication and authorization module is also developed and implemented on the frontend to allow user login on the app.
+
+The whole app is tested using End-to-End testing with [Playwright](https://playwright.dev/).
 
 - [bloglist](/part5/bloglist/): Development of the frontend for the backend implemented in part4 with login functionality and unit testing.
 
