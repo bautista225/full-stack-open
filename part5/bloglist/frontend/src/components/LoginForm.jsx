@@ -44,11 +44,7 @@ const LoginForm = ({ executeUserLogin }) => {
 }
 
 LoginForm.propTypes = {
-    username: PropTypes.string.isRequired,
-    password: PropTypes.string.isRequired,
-    handleLogin: PropTypes.func.isRequired,
-    handleUsernameChange: PropTypes.func.isRequired,
-    handlePasswordChange: PropTypes.func.isRequired,
+    executeUserLogin: PropTypes.func.isRequired,
 }
 
 export default LoginForm
