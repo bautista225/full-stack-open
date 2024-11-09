@@ -51,9 +51,13 @@ In this part the integration tests are applied to the React frontend. User authe
 
 The whole app is tested using End-to-End testing with [Playwright](https://playwright.dev/).
 
-- [bloglist](/part5/bloglist/): Development of the frontend for the backend implemented in part4 with login functionality and unit testing.
+- [bloglist frontend](/part5/bloglist/frontend/): Development of the frontend for the backend implemented in part4 with login functionality and component's testing.
+- [bloglist test with Playwright](/part5/bloglist/playwright/): Development of End-to-End tests with this library.
 
-### Part 6 - Advanced state management
+### [Part 6 - Advanced state management](/part6/)
+
+In this section the administration of the state of the app is moved out of the componends. To do this, Redux is used.
+
 ### Part 7 - React router, custom hooks, styling app with CSS and webpack
 ### Part 8 - GraphQL
 ### Part 9 - TypeScript
