@@ -56,7 +56,12 @@ The whole app is tested using End-to-End testing with [Playwright](https://playw
 
 ### [Part 6 - Advanced state management](/part6/)
 
-In this section the administration of the state of the app is moved out of the componends. To do this, Redux is used.
+In this section the administration of the state of the app is moved out of the componends. To do this, different approaches for managing states are applied. Each of them is based on [Flux](https://facebookarchive.github.io/flux/docs/in-depth-overview/) architecture.
+- Redux: 
+    - [anecdotes with Redux](/part6/anecdotes-redux/)
+    - [unicafe](/part6/unicafe-redux/)
+- React Query
+    - [anecdotes with Query](/part6/anecdotes-query/)
 
 ### Part 7 - React router, custom hooks, styling app with CSS and webpack
 ### Part 8 - GraphQL

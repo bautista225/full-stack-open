@@ -2,8 +2,10 @@ import AnecdoteForm from './components/AnecdoteForm'
 import Notification from './components/Notification'
 import { useQuery, useMutation, useQueryClient } from '@tanstack/react-query'
 import { getAnecdotes, updateAnecdote } from './requests'
+import { useNotificationDispatch } from './reducers/notificationReducer'
 
 const App = () => {
+    const notificationDispatch = useNotificationDispatch()
     const queryClient = useQueryClient()
     const updateAnecdoteMutation = useMutation({
         mutationFn: updateAnecdote,
@@ -12,6 +14,13 @@ const App = () => {
                 .getQueryData(['anecdotes'])
                 .map(anecdote => anecdote.id === updatedAnecdote.id ? updatedAnecdote : anecdote)
             queryClient.setQueryData(['anecdotes'], anecdotes)
+        },
+        onError: (error) => {
+            let errorMessage = error.message
+            if (error.name === 'AxiosError')
+                errorMessage = error.response.data?.error
+            notificationDispatch({ type: 'SET', payload: errorMessage })
+            setTimeout(() => notificationDispatch({ type: 'REMOVE' }), 5000)
         }
     })
     const result = useQuery({
@@ -31,6 +40,8 @@ const App = () => {
     const handleVote = (anecdote) => {
         console.log('vote')
         updateAnecdoteMutation.mutate({ ...anecdote, votes: anecdote.votes + 1 })
+        notificationDispatch({ type: 'SET', payload: `anecdote '${anecdote.content}' voted` })
+        setTimeout(() => notificationDispatch({ type: 'REMOVE' }), 5000)
     }
 
     return (
