@@ -56,8 +56,8 @@ The whole app is tested using End-to-End testing with [Playwright](https://playw
 
 ### [Part 6 - Advanced state management](/part6/)
 
-In this section the administration of the state of the app is moved out of the componends. To do this, different approaches for managing states are applied. Each of them are based on [Flux](https://facebookarchive.github.io/flux/docs/in-depth-overview/) architecture.
-- Redux: focused on client-side state management
+In this section the administration of the state of the app is moved out of the componends. To do this, different approaches for managing states are applied:
+- Redux: focused on client-side state management, based on [Flux](https://facebookarchive.github.io/flux/docs/in-depth-overview/) architecture.
     - [anecdotes with Redux](/part6/anecdotes-redux/)
     - [unicafe](/part6/unicafe-redux/)
 - React Query: focused on server-side state management
