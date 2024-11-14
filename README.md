@@ -63,7 +63,10 @@ In this section the administration of the state of the app is moved out of the c
 - React Query: focused on server-side state management
     - [anecdotes with Query](/part6/anecdotes-query/)
 
-### Part 7 - React router, custom hooks, styling app with CSS and webpack
+### [Part 7 - React router, custom hooks, styling app with CSS and webpack](/part7/)
+
+
+
 ### Part 8 - GraphQL
 ### Part 9 - TypeScript
 ### Part 10 - React Native
