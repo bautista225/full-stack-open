@@ -1,0 +1,20 @@
+###
+# Petición completa
+POST http://localhost:3001/api/users/ HTTP/1.1
+Content-type: application/json
+
+{
+    "username": "hellas",
+    "name": "Arto Hellas",
+    "password": "123"
+}
+
+###
+POST http://localhost:3001/api/users/ HTTP/1.1
+Content-type: application/json
+
+{
+    "username": "mluukkai",
+    "name": "Matti Luukkainen",
+    "password": "456"
+}
