@@ -2,17 +2,18 @@ import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { setNotification } from '../reducers/notificationReducer'
 import { createBlog } from '../reducers/blogReducer'
+import { useField } from '../hooks/useField'
 
 const CreateBlogForm = () => {
     const dispatch = useDispatch()
-    const [title, setTitle] = useState('')
-    const [author, setAuthor] = useState('')
-    const [url, setUrl] = useState('')
+    const title = useField('title')
+    const author = useField('author')
+    const url = useField('url')
 
     const resetForm = () => {
-        setTitle('')
-        setAuthor('')
-        setUrl('')
+        title.reset()
+        author.reset()
+        url.reset()
     }
 
     const handleSubmit = (event) => {
@@ -20,9 +21,9 @@ const CreateBlogForm = () => {
 
         dispatch(
             createBlog({
-                title,
-                author,
-                url,
+                title: title.value,
+                author: author.value,
+                url: url.value,
             }),
         )
 
@@ -42,31 +43,19 @@ const CreateBlogForm = () => {
                 <div>
                     title:
                     <input
-                        type="text"
-                        value={title}
-                        name="title"
-                        placeholder="title"
-                        onChange={({ target }) => setTitle(target.value)}
+                        {...title.inputProps()}
                     />
                 </div>
                 <div>
                     author:
                     <input
-                        type="text"
-                        value={author}
-                        name="author"
-                        placeholder="author"
-                        onChange={({ target }) => setAuthor(target.value)}
+                        {...author.inputProps()}
                     />
                 </div>
                 <div>
                     url:
                     <input
-                        type="text"
-                        value={url}
-                        name="url"
-                        placeholder="url"
-                        onChange={({ target }) => setUrl(target.value)}
+                        {...url.inputProps()}
                     />
                 </div>
                 <button type="submit">create</button>

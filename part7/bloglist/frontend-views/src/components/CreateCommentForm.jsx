@@ -1,15 +1,17 @@
 import { useState } from 'react'
+import { useField } from '../hooks/useField'
 
 const CreateCommentForm = ({ onSubmit }) => {
-    const [content, setContent] = useState('')
+    const content = useField('comment')
 
     const resetForm = () => {
-        setContent('')
+        content.reset()
     }
 
     const handleSubmit = (event) => {
         event.preventDefault()
-        onSubmit({ content })
+
+        onSubmit({ content: content.value })
         resetForm()
     }
 
@@ -17,11 +19,7 @@ const CreateCommentForm = ({ onSubmit }) => {
         <div>
             <form onSubmit={handleSubmit}>
                 <input
-                    type="text"
-                    value={content}
-                    name="comment"
-                    placeholder="comment"
-                    onChange={({ target }) => setContent(target.value)}
+                    {...content.inputProps()}
                 />
                 <button type="submit">add comment</button>
             </form>

@@ -67,10 +67,14 @@ blogsRouter.delete(
                 .status(401)
                 .json({ error: 'user is not the owner of the blog' })
 
+        await blog.deleteOne()
+
         // Eliminar comentarios relacionados con el blog
         await Comment.deleteMany({ blog: blog._id })
 
-        await blog.deleteOne()
+        user.blogs = user.blogs.filter(userBlogId => userBlogId !== blog._id)
+        await user.save()
+
         response.status(204).end()
     }
 )

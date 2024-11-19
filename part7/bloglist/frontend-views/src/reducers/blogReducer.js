@@ -58,6 +58,7 @@ export const addLike = (blog) => {
         const newBlog = { ...blog, likes: blog.likes + 1 }
         const updatedBlog = await blogService.update(newBlog)
         updatedBlog.user = blog.user
+        updatedBlog.comments = blog.comments
         dispatch(updateBlog(updatedBlog))
     }
 }
