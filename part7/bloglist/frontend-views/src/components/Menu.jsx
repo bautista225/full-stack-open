@@ -1,6 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
 import { userLogout } from '../reducers/userReducer'
+import { Typography } from '@mui/material'
 
 const Menu = () => {
     const navigate = useNavigate()
@@ -30,7 +31,7 @@ const Menu = () => {
                 {user.name} logged in
                 <button onClick={handleLogout}>logout</button>
             </div>
-            <h2>blog app</h2>
+            <Typography variant='h2'>blog app</Typography>
         </>
     )
 }
