@@ -25,19 +25,19 @@ module.exports = {
     ],
     'extends': 'eslint:recommended',
     'rules': {
-        '@stylistic/js/indent': [
+        'indent': [
             'error',
             4
         ],
-        '@stylistic/js/linebreak-style': [
+        'linebreak-style': [
             'error',
             'unix'
         ],
-        '@stylistic/js/quotes': [
+        'quotes': [
             'error',
             'single'
         ],
-        '@stylistic/js/semi': [
+        'semi': [
             'error',
             'never'
         ],
@@ -49,6 +49,9 @@ module.exports = {
         'arrow-spacing': [
             'error', { 'before': true, 'after': true }
         ],
-        'no-console': 0
+        'no-console': 0,
+        'react/react-in-jsx-scope': 'off',
+        'react/prop-types': 0,
+        'no-unused-vars': 0
     }
 }

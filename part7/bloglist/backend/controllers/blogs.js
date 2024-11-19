@@ -1,21 +1,19 @@
 const blogsRouter = require('express').Router()
 const Blog = require('../models/blog')
+const Comment = require('../models/comment')
 const middleware = require('../utils/middleware')
 
 blogsRouter.get('/', async (request, response) => {
-    const blogs = await Blog
-        .find({})
+    const blogs = await Blog.find({})
+        .populate('comments')
         .populate('user', { username: 1, name: 1 })
     response.json(blogs)
 })
 
 blogsRouter.get('/:id', async (request, response) => {
-    const note = await Blog
-        .findById(request.params.id)
-    if (note)
-        response.json(note)
-    else
-        response.status(404).end()
+    const note = await Blog.findById(request.params.id)
+    if (note) response.json(note)
+    else response.status(404).end()
 })
 
 blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
@@ -26,7 +24,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
         title,
         author,
         url,
-        user: user.id
+        user: user.id,
     })
 
     const savedBlog = await blog.save()
@@ -45,23 +43,36 @@ blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
         author,
         url,
         likes,
-        user: user.id
+        user: user.id,
     }
 
-    const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blogToUpdate, { new: true, runValidators: true })
+    const updatedBlog = await Blog.findByIdAndUpdate(
+        request.params.id,
+        { $set: blogToUpdate },
+        { new: true, runValidators: true }
+    )
 
     response.json(updatedBlog)
 })
 
-blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
-    const blog = await Blog.findById(request.params.id)
-    const user = request.user
+blogsRouter.delete(
+    '/:id',
+    middleware.userExtractor,
+    async (request, response) => {
+        const blog = await Blog.findById(request.params.id)
+        const user = request.user
 
-    if (blog.user.toString() !== user._id.toString())
-        return response.status(401).json({ error: 'user is not the owner of the blog' })
+        if (blog.user.toString() !== user._id.toString())
+            return response
+                .status(401)
+                .json({ error: 'user is not the owner of the blog' })
 
-    await blog.deleteOne()
-    response.status(204).end()
-})
+        // Eliminar comentarios relacionados con el blog
+        await Comment.deleteMany({ blog: blog._id })
+
+        await blog.deleteOne()
+        response.status(204).end()
+    }
+)
 
 module.exports = blogsRouter
