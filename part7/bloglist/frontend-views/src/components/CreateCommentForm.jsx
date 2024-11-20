@@ -1,8 +1,9 @@
-import { useState } from 'react'
 import { useField } from '../hooks/useField'
+import { Box, TextField, Grid2 as Grid } from '@mui/material'
+import { LoadingButton } from '@mui/lab'
 
 const CreateCommentForm = ({ onSubmit }) => {
-    const content = useField('comment')
+    const content = useField({ name: 'comment' })
 
     const resetForm = () => {
         content.reset()
@@ -16,14 +17,27 @@ const CreateCommentForm = ({ onSubmit }) => {
     }
 
     return (
-        <div>
-            <form onSubmit={handleSubmit}>
-                <input
-                    {...content.inputProps()}
-                />
-                <button type="submit">add comment</button>
-            </form>
-        </div>
+        <Box
+            component="form"
+            onSubmit={handleSubmit}
+        >
+            <TextField
+                {...content.textfieldProps()}
+                variant="outlined"
+                size="small"
+                required
+                fullWidth
+            />
+
+            <LoadingButton
+                type="submit"
+                variant="outlined"
+                loading={false}
+                loadingIndicator="Adding..."
+            >
+                add comment
+            </LoadingButton>
+        </Box>
     )
 }
 

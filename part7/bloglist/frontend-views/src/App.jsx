@@ -62,8 +62,7 @@ const App = () => {
     return (
         <>
             <NavBar navArrayLinks={navArrayLinks} />
-            <Container sx={{ mt: 5 }}>
-                <Menu />
+            <Container sx={{ mt: 3 }}>
                 <Routes>
                     <Route path="/" element={<BlogList />} />
                     <Route path="/users" element={<UsersInfo />} />

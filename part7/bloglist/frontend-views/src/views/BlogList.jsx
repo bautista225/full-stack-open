@@ -4,6 +4,7 @@ import CreateBlogForm from '../components/CreateBlogForm'
 import Blog from '../components/Blog'
 import { useRef } from 'react'
 import { Link } from 'react-router-dom'
+import { Box, Card, CardContent } from '@mui/material'
 
 const BlogList = () => {
     const { blogs, user } = useSelector((state) => ({
@@ -12,32 +13,25 @@ const BlogList = () => {
     }))
     const blogFormRef = useRef()
 
-    const blogStyle = {
-        paddingTop: 10,
-        paddingLeft: 2,
-        border: 'solid',
-        borderWidth: 1,
-        marginBottom: 5,
-    }
-
     return (
-        <div>
+        <Box sx={{ display: 'grid', gap: 1 }}>
             <Togglable buttonLabel={'new blog'} ref={blogFormRef}>
                 <CreateBlogForm />
             </Togglable>
-            <div>
-                {[...blogs]
-                    .sort((blogA, blogB) => blogA.likes - blogB.likes)
-                    .reverse()
-                    .map((blog) => (
-                        <div style={blogStyle} key={blog.id}>
+            {[...blogs]
+                .sort((blogA, blogB) => blogA.likes - blogB.likes)
+                .reverse()
+                .map((blog) => (
+                    <Card key={blog.id}>
+                        <CardContent>
                             <Link to={`/blogs/${blog.id}`}>
-                                {blog.title} by {blog.author} ({blog.likes} likes)
+                                {blog.title} by {blog.author} ({blog.likes}{' '}
+                                likes)
                             </Link>
-                        </div>
-                    ))}
-            </div>
-        </div>
+                        </CardContent>
+                    </Card>
+                ))}
+        </Box>
     )
 }
 
