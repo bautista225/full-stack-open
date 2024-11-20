@@ -20,6 +20,7 @@ const CreateCommentForm = ({ onSubmit }) => {
         <Box
             component="form"
             onSubmit={handleSubmit}
+            sx={{ display: 'grid', gap: 2 }}
         >
             <TextField
                 {...content.textfieldProps()}

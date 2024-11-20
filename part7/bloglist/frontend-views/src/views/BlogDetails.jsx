@@ -4,6 +4,7 @@ import { useDispatch } from 'react-redux'
 import { addLike, createComment, removeBlog } from '../reducers/blogReducer'
 import { setNotification } from '../reducers/notificationReducer'
 import CreateCommentForm from '../components/CreateCommentForm'
+import { Button } from '@mui/material'
 
 const BlogDetails = () => {
     const dispatch = useDispatch()
@@ -59,13 +60,26 @@ const BlogDetails = () => {
             </div>
             <div>
                 likes {blog.likes}
-                <button onClick={handleLikeClick}>like</button>
+                <Button
+                    size="small"
+                    variant="outlined"
+                    color='success'
+                    onClick={handleLikeClick}
+                    sx={{ ml: 1 }}
+                >
+                    like
+                </Button>
             </div>
             <div>added by {blog.user.name}</div>
-            <div>
-                <button style={showWhenUserIsOwner} onClick={handleRemoveClick}>
+            <div style={showWhenUserIsOwner}>
+                <Button
+                    size="small"
+                    variant="outlined"
+                    color="error"
+                    onClick={handleRemoveClick}
+                >
                     remove
-                </button>
+                </Button>
             </div>
             <div>
                 <h3>comments</h3>
