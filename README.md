@@ -65,9 +65,19 @@ In this section the administration of the state of the app is moved out of the c
 
 ### [Part 7 - React router, custom hooks, styling app with CSS and webpack](/part7/)
 
+In this section React Router has been implemented in both state frameworks: Redux and Query. Then, some customized hooks have been developed. Finally the Bloglist App project from previous parts have been improved with those functionalities. Material UI has been applied over the Bloglist App project too, experimenting with a routed navbar and the implementation of different style components as the Cards, becoming a responsive web app.
 
+- [Anecdotes with React router](/part7/anecdotes-routed/)
+- [Ultimate hooks](/part7/ultimate-hooks/)
+- [Country with customized hooks](/part7/country-hook/)
+- [Bloglist App with Material UI](/part7/bloglist/)
 
-### Part 8 - GraphQL
+### [Part 8 - GraphQL](/part8/)
+
+This section implements GraphQL on different projects, the alternative to REST for communications client-server.
+
+- [library](/part8/library/)
+
 ### Part 9 - TypeScript
 ### Part 10 - React Native
 ### Part 11 - CI/CD
