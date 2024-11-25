@@ -1,10 +1,10 @@
 import { useMutation, useQuery } from '@apollo/client'
-import { ALL_BOOKS } from '../graphql/queries'
-import { CREATE_BOOK } from '../graphql/mutations'
+import { ALL_BOOKS } from './graphql/queries'
+import { CREATE_BOOK } from './graphql/mutations'
 import { ALL_AUTHORS } from '../authors/graphql/queries'
 
-export const useBooks = () => {
-    const result = useQuery(ALL_BOOKS)
+export const useBooks = (queryOptions = {}) => {
+    const result = useQuery(ALL_BOOKS, queryOptions)
     return {
         data: result.data?.allBooks || [],
         error: result.error,

@@ -2,7 +2,7 @@ import { useState } from 'react'
 import { useField } from '../hooks/useField'
 import { useCreateBook } from '../books/hooks'
 
-const NewBook = (props) => {
+const NewBookForm = (props) => {
     const title = useField({ name: 'title' })
     const author = useField({ name: 'author' })
     const published = useField({ name: 'published', type: 'number' })
@@ -64,4 +64,4 @@ const NewBook = (props) => {
     )
 }
 
-export default NewBook
+export default NewBookForm

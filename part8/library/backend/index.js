@@ -97,7 +97,7 @@ const resolvers = {
         },
     },
     Author: {
-        bookCount: async (root) => await Book.collection.countDocuments(),
+        bookCount: async (root) => await Book.find({ author: root.id }).countDocuments(),
     },
     Mutation: {
         createUser: async (root, args) => {
@@ -143,9 +143,10 @@ const resolvers = {
                 })
             }
 
-            const author = new Author({ name: args.author })
-            if (!(await Author.findOne({ name: args.author })))
+            let author = await Author.findOne({ name: args.author })
+            if (!(author))
                 try {
+                    author = new Author({ name: args.author })
                     await author.save()
                 } catch (error) {
                     throw new GraphQLError(error.message, {
