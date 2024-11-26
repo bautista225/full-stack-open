@@ -2,7 +2,6 @@ import _ from 'lodash'
 import { typeDef as Author, resolvers as authorResolvers } from './author.js'
 import { typeDef as Book, resolvers as bookResolvers } from './book.js'
 import { typeDef as User, resolvers as userResolvers } from './user.js'
-import { SUBSCRIPTIONS } from './subscriptions.js'
 import { PubSub } from 'graphql-subscriptions'
 import dotenv from 'dotenv'
 dotenv.config()
@@ -22,13 +21,11 @@ const Query = `
         _empty: String
     } 
 `
+
 const main_resolvers = {
     Mutation: {
     },
     Subscription: {
-        bookAdded: {
-            subscribe: () => pubsub.asyncIterator([SUBSCRIPTIONS.BOOK_ADDED]),
-        },
     },
 }
 

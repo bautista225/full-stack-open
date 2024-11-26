@@ -83,5 +83,10 @@ export const resolvers = {
 
             return book
         },
+    },
+    Subscription:{        
+        bookAdded: {
+            subscribe: () => pubsub.asyncIterableIterator([SUBSCRIPTIONS.BOOK_ADDED]),
+        },
     }
 }
