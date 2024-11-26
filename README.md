@@ -76,7 +76,9 @@ Material UI has been applied over the Bloglist App project too, experimenting wi
 
 ### [Part 8 - GraphQL](/part8/)
 
-This section implements GraphQL on different projects, the alternative to REST for communications client-server.
+This section implements GraphQL, the alternative to REST for communications client-server. 
+
+The project developed consists of a Library App developed in React and Node.js. It implements user session management for different actions and stores the data in MongoDB using GraphQL communication.
 
 - [library](/part8/library/)
 
