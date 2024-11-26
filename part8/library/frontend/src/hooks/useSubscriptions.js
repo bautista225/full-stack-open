@@ -12,11 +12,12 @@ export const useSubscriptions = () => {
     const client = useApolloClient()
 
     const updateAllBooksCacheWith = (addedBook) => {
+        console.log({ addedBook })
         const includedIn = (set, object) =>
             set.map((p) => p.id).includes(object.id)
 
         let dataInStore = client.readQuery({ query: ALL_BOOKS })
-        if (!includedIn(dataInStore.allBooks, addedBook)) {
+        if (!includedIn(dataInStore.allBooks, addedBook, 'id')) {
             client.writeQuery({
                 query: ALL_BOOKS,
                 data: {
@@ -26,16 +27,29 @@ export const useSubscriptions = () => {
         }
 
         dataInStore = client.readQuery({ query: ALL_AUTHORS })
-        client.writeQuery({
-            query: ALL_AUTHORS,
-            data: {
-                allAuthors: dataInStore.allAuthors.map((a) =>
-                    a.name === addedBook.author.name
-                        ? { ...a, bookCount: a.bookCount + 1 }
-                        : a
-                ),
-            },
-        })
+        if (includedIn(dataInStore.allAuthors, addedBook.author)) {
+            client.writeQuery({
+                query: ALL_AUTHORS,
+                data: {
+                    allAuthors: dataInStore.allAuthors.map((a) =>
+                        a.name === addedBook.author.name
+                            ? { ...a, bookCount: a.bookCount + 1 }
+                            : a
+                    ),
+                },
+            })
+        } else {
+            client.writeQuery({
+                query: ALL_AUTHORS,
+                data: {
+                    allAuthors: dataInStore.allAuthors.concat({
+                        ...addedBook.author,
+                        bookCount: 1,
+                        born: null
+                    }),
+                },
+            })
+        }
 
         // Actualizar la caché de ALL_BOOKS con filtros (géneros)
         const genres = addedBook.genres || []

@@ -3,6 +3,7 @@ import { useUser } from '../users/hooks'
 
 const Recommendations = ({ show }) => {
     const { data: userData, loading: userLoading, error: userError } = useUser()
+
     const userFavoriteGenre = userData?.favoriteGenre
     const {
         data: booksData,
