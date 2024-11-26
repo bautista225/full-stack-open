@@ -3,14 +3,23 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBookForm from './components/NewBookForm'
 import LoginForm from './components/LoginForm'
-import { useLogout, useRestartSession, useUser } from './users/hooks'
+import { useLogout, useRestartSession } from './users/hooks'
 import Recommendations from './components/Recommendations'
+import { useSubscriptions } from './hooks/useSubscriptions'
+import { ALL_BOOKS } from './books/graphql/queries'
 
 const App = () => {
     const [page, setPage] = useState('authors')
     const [token, setToken] = useState(null)
     const { logout } = useLogout({ setToken })
     const { restartSession } = useRestartSession({ setToken })
+    const client = useSubscriptions()
+
+    const results = client.readQuery({
+        query: ALL_BOOKS
+    })
+
+    console.log(results)
 
     const isLogged = token !== null
     const visibleWithSession = { display: isLogged ? '' : 'none' }

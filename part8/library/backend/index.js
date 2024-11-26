@@ -12,6 +12,7 @@ import http from 'http'
 import { expressMiddleware } from '@apollo/server/express4'
 import express from 'express'
 import { typeDefs, resolvers } from './graphql/schema.js'
+import cors from 'cors'
 
 const MONGODB_URI = process.env.MONGODB_URI
 
@@ -34,9 +35,10 @@ const apolloServer = new ApolloServer({
 })
 
 await apolloServer.start()
+app.use(cors())
 app.use(express.json())
 app.use(
-    '/graphql',
+    '/',
     expressMiddleware(apolloServer, {
         context: async ({ req }) => {
             const auth = req ? req.headers.authorization : null
@@ -63,6 +65,6 @@ useServer({ schema }, wsServer)
 
 const PORT = 4000
 httpServer.listen(PORT, () => {
-    console.log(`Server ready at http://localhost:${PORT}/graphql`)
+    console.log(`Server ready at http://localhost:${PORT}/`)
     console.log(`Subscriptions ready at ws://localhost:${PORT}/graphql`)
 })

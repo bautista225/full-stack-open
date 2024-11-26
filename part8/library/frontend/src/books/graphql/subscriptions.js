@@ -1,12 +1,11 @@
 import { gql } from '@apollo/client'
 import { BOOK_DETAILS } from './fragments'
 
-export const ALL_BOOKS = gql`
-    query AllBooks($genre: String) {
-        allBooks(genre: $genre) {
+export const BOOK_ADDED = gql`
+    subscription {
+        bookAdded {
             ...BookDetails
         }
     }
-
     ${BOOK_DETAILS}
 `

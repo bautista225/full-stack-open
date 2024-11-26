@@ -14,7 +14,7 @@ export const useBooks = (queryOptions = {}) => {
 
 export const useCreateBook = () => {
     const [createBook] = useMutation(CREATE_BOOK, {
-        refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
+        // refetchQueries: [{ query: ALL_BOOKS }, { query: ALL_AUTHORS }],
     })
     return (variables) => createBook({ variables })
 }
