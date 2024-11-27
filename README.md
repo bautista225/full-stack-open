@@ -82,7 +82,12 @@ The project developed consists of a Library App developed in React and Node.js. 
 
 - [library](/part8/library/)
 
-### Part 9 - TypeScript
+### [Part 9 - TypeScript](/part9/)
+
+This section is about TypeScript: the open-source superset of JavaScript developed by Microsoft that compiles to plain JavaScript.
+
+In this section, the tools introduced earlier to add end-to-end functionality with JavaScript are applied to a TypeScript project.
+
 ### Part 10 - React Native
 ### Part 11 - CI/CD
 ### Part 12 - Containers
