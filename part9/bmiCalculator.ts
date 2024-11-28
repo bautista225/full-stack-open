@@ -19,8 +19,8 @@ const parseArguments = (args: string[]): CalculateBmiValues => {
   }
 };
 
-const calculateBmi = (height: number, mass: number): String => {
-  const bmi = (mass / height ** 2) * 10000;
+export const calculateBmi = (height: number, mass: number): String => {
+  const bmi = (mass / (height / 100) ** 2);
 
   if (bmi < 16) return "Underweight (Severe thinness)";
   else if (bmi < 17) return "Underweight (Moderate thinness)";
@@ -29,7 +29,7 @@ const calculateBmi = (height: number, mass: number): String => {
   else if (bmi < 30) return "Overweight (Pre-obese)";
   else if (bmi < 35) return "Obese (Class I)";
   else if (bmi < 40) return "Obese (Class II)";
-  else return "Obese (Class II)";
+  else return "Obese (Class III)";
 };
 
 try {
