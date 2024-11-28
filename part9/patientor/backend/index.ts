@@ -8,8 +8,9 @@ const options: cors.CorsOptions = {
 };
 
 const app = express();
-// eslint-disable-next-line @typescript-eslint/no-unsafe-call
-app.use(cors(options));
+
+app.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(options));
+
 app.use(express.json());
 
 app.get("/api/ping", (_req, res) => {
