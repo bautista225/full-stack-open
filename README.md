@@ -91,4 +91,3 @@ In this section, the tools introduced earlier to add end-to-end functionality wi
 ### Part 10 - React Native
 ### Part 11 - CI/CD
 ### Part 12 - Containers
-### Part 13 - Using relational databases

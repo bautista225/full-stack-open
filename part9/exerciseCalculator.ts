@@ -5,10 +5,21 @@ interface CalculateExercisesValues {
   targetHours: number;
 }
 
+const checkArguments = (
+  hoursPerDay: unknown,
+  targetHours: unknown
+): boolean => {
+  return (
+    Array.isArray(hoursPerDay) &&
+    hoursPerDay.filter((v) => isNotNumber(v)).length === 0 &&
+    !isNotNumber(targetHours)
+  );
+};
+
 const parseArguments = (args: string[]): CalculateExercisesValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
 
-  if (args.slice(2).filter((v) => isNotNumber(v)).length === 0) {
+  if (checkArguments(args.slice(3), args[2])) {
     return {
       targetHours: Number(args[2]),
       hoursPerDay: args.slice(3).map((v) => Number(v)),
@@ -25,7 +36,7 @@ interface ExerciseCalculations {
   average: number;
   success: boolean;
   rating: number;
-  ratingDescription: String;
+  ratingDescription: string;
 }
 
 const calculateExercises = (
@@ -48,7 +59,7 @@ const calculateExercises = (
         ? "target achieved!"
         : rating === 2
         ? "not too bad but could be better"
-        : "not enough, try again!",
+        : "bad",
   };
 };
 
@@ -62,3 +73,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default { checkArguments, calculateExercises };

@@ -5,11 +5,15 @@ interface CalculateBmiValues {
   mass: number;
 }
 
+const checkArguments = (height: unknown, mass: unknown) => {
+  return !isNotNumber(height) && !isNotNumber(mass);
+};
+
 const parseArguments = (args: string[]): CalculateBmiValues => {
   if (args.length < 4) throw new Error("Not enough arguments");
   if (args.length > 4) throw new Error("Too many arguments");
 
-  if (!isNotNumber(args[2]) && !isNotNumber(args[3])) {
+  if (checkArguments(args[2], args[3])) {
     return {
       height: Number(args[2]),
       mass: Number(args[3]),
@@ -19,8 +23,8 @@ const parseArguments = (args: string[]): CalculateBmiValues => {
   }
 };
 
-export const calculateBmi = (height: number, mass: number): String => {
-  const bmi = (mass / (height / 100) ** 2);
+const calculateBmi = (height: number, mass: number): string => {
+  const bmi = mass / (height / 100) ** 2;
 
   if (bmi < 16) return "Underweight (Severe thinness)";
   else if (bmi < 17) return "Underweight (Moderate thinness)";
@@ -42,3 +46,5 @@ try {
   }
   console.log(errorMessage);
 }
+
+export default { checkArguments, calculateBmi };
