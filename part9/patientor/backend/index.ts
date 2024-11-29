@@ -9,7 +9,7 @@ const options: cors.CorsOptions = {
 
 const app = express();
 
-app.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(options));
+app.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(options)); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43909
 
 app.use(express.json());
 
