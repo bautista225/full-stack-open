@@ -1,0 +1,10 @@
+POST http://localhost:3001/api/patients/ HTTP/1.1
+Content-type: application/json
+
+{
+    "name": "Juan Bautista",
+    "dateOfBirth": "2024-11-11",
+    "ssn": "250470-555L",
+    "gender": "male",
+    "occupation": "Software Developer"
+}
