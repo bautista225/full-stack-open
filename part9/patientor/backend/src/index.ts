@@ -22,9 +22,9 @@ app.get("/api/ping", (_req, res) => {
   res.send("pong");
 });
 
-app.get("/api/patients", patientsRouter);
+app.use("/api/patients", patientsRouter);
 
-app.get("/api/diagnoses", diagnosesRouter);
+app.use("/api/diagnoses", diagnosesRouter);
 
 const PORT = 3001;
 
