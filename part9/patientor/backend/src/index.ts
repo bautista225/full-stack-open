@@ -1,5 +1,7 @@
 import express from "express";
 import cors from "cors";
+import patientsRouter from "./routes/patients";
+import diagnosesRouter from "./routes/diagnoses";
 
 const allowedOrigins = ["http://localhost:3000", "http://localhost:5173"];
 
@@ -9,7 +11,9 @@ const options: cors.CorsOptions = {
 
 const app = express();
 
-app.use((cors as (options: cors.CorsOptions) => express.RequestHandler)(options)); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43909
+app.use(
+  (cors as (options: cors.CorsOptions) => express.RequestHandler)(options)
+); // https://github.com/DefinitelyTyped/DefinitelyTyped/issues/43909
 
 app.use(express.json());
 
@@ -18,10 +22,9 @@ app.get("/api/ping", (_req, res) => {
   res.send("pong");
 });
 
-app.get("/api/patients", (_req, res) => {
-  console.log("someone called patients here");
-  res.send();
-});
+app.get("/api/patients", patientsRouter);
+
+app.get("/api/diagnoses", diagnosesRouter);
 
 const PORT = 3001;
 
