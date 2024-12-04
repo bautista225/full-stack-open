@@ -2,6 +2,12 @@ interface PartProps {
   coursePart: CoursePart;
 }
 
+const assertNever = (value: never): never => {
+  throw new Error(
+    `Unhandled discriminated union member: ${JSON.stringify(value)}`
+  );
+};
+
 const Part = ({ coursePart }: PartProps) => {
   const title = (
     <strong>
@@ -14,36 +20,38 @@ const Part = ({ coursePart }: PartProps) => {
   switch (coursePart.kind) {
     case "basic":
       body = (
-        <p>
+        <div>
           <em>{coursePart.description}</em>
-        </p>
+        </div>
       );
       break;
     case "group":
-      body = <p>project exercises {coursePart.groupProjectCount}</p>;
+      body = <div>project exercises {coursePart.groupProjectCount}</div>;
       break;
     case "background":
       body = (
         <>
-          <p>{coursePart.description}</p>
-          <p>submit to {coursePart.backgroundMaterial}</p>
+          <div>{coursePart.description}</div>
+          <div>submit to {coursePart.backgroundMaterial}</div>
         </>
       );
       break;
     case "special":
       body = (
         <>
-          <p>
+          <div>
             <em>{coursePart.description}</em>
-          </p>
-          <p>required skills: {coursePart.requirements.join(", ")}</p>
+          </div>
+          <div>required skills: {coursePart.requirements.join(", ")}</div>
         </>
       );
       break;
+    default:
+      return assertNever(coursePart);
   }
 
   return (
-    <div>
+    <div style={{ marginBottom: 10 }}>
       {title}
       {body}
     </div>
