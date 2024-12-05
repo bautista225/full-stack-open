@@ -1,11 +1,13 @@
 interface RadioButtonProps {
   name: string;
+  value: string;
   checkedValue: string;
   handleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 }
 
 const RadioButton = ({
   name,
+  value,
   checkedValue,
   handleChange,
 }: RadioButtonProps) => {
@@ -14,11 +16,11 @@ const RadioButton = ({
       {name}{" "}
       <input
         type="radio"
-        id={name}
+        id={value}
         name={name}
-        value={name}
+        value={value}
         onChange={handleChange}
-        checked={name === checkedValue}
+        checked={value === checkedValue}
       />
     </label>
   );

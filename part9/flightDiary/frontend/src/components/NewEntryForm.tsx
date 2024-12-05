@@ -1,22 +1,27 @@
-import { useState } from "react";
 import { NewDiaryEntry } from "../types";
 import RadioButton from "./RadioButton";
+import useNewEntryForm from "../hooks/useNewEntryForm";
 
 interface NewEntryFormProps {
   errorMessage: string;
   onNewEntry: (newEntry: NewDiaryEntry) => void;
 }
 
-const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
-  const [newEntry, setNewEntry] = useState<NewDiaryEntry>({
-    comment: "",
-    date: "",
-    visibility: "",
-    weather: "",
-  });
+const VISIBILITY_OPTIONS = ["great", "good", "ok", "poor"];
+const WEATHER_OPTIONS = ["sunny", "rainy", "cloudy", "stormy", "windy"];
 
-  const visibilityOptions = ["great", "good", "ok", "poor"];
-  const weatherOptions = ["sunny", "rainy", "cloudy", "stormy", "windy"];
+const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
+  const [newEntry, dispatch] = useNewEntryForm();
+
+  const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    dispatch({
+      type: "change_value",
+      payload: {
+        inputName: event.target.name,
+        inputValue: event.target.value,
+      },
+    });
+  };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -24,12 +29,8 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
     console.log(newEntry);
 
     onNewEntry(newEntry);
-    setNewEntry({
-      comment: "",
-      date: "",
-      visibility: "",
-      weather: "",
-    });
+
+    dispatch({ type: "clear_form" });
   };
 
   return (
@@ -41,45 +42,41 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
           date
           <input
             type="date"
+            name="date"
             value={newEntry.date}
-            onChange={(event) =>
-              setNewEntry({ ...newEntry, date: event.target.value })
-            }
+            onChange={handleChange}
           />
         </div>
         <div>
           visibility{" "}
-          {visibilityOptions.map((o) => (
+          {VISIBILITY_OPTIONS.map((o) => (
             <RadioButton
               key={o}
-              name={o}
+              name="visibility"
+              value={o}
               checkedValue={newEntry.visibility}
-              handleChange={(event) =>
-                setNewEntry({ ...newEntry, visibility: event.target.value })
-              }
+              handleChange={handleChange}
             />
           ))}
         </div>
         <div>
           weather{" "}
-          {weatherOptions.map((o) => (
+          {WEATHER_OPTIONS.map((o) => (
             <RadioButton
               key={o}
-              name={o}
+              name="weather"
+              value={o}
               checkedValue={newEntry.weather}
-              handleChange={(event) =>
-                setNewEntry({ ...newEntry, weather: event.target.value })
-              }
+              handleChange={handleChange}
             />
           ))}
         </div>
         <div>
           comment
           <input
+            name="comment"
             value={newEntry.comment}
-            onChange={(event) =>
-              setNewEntry({ ...newEntry, comment: event.target.value })
-            }
+            onChange={handleChange}
           />
         </div>
         <button type="submit">add</button>
