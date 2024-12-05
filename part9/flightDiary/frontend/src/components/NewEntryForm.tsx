@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { NewDiaryEntry } from "../types";
+import RadioButton from "./RadioButton";
 
 interface NewEntryFormProps {
   errorMessage: string;
@@ -13,6 +14,9 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
     visibility: "",
     weather: "",
   });
+
+  const visibilityOptions = ["great", "good", "ok", "poor"];
+  const weatherOptions = ["sunny", "rainy", "cloudy", "stormy", "windy"];
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
@@ -36,6 +40,7 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
         <div>
           date
           <input
+            type="date"
             value={newEntry.date}
             onChange={(event) =>
               setNewEntry({ ...newEntry, date: event.target.value })
@@ -43,22 +48,30 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
           />
         </div>
         <div>
-          visibility
-          <input
-            value={newEntry.visibility}
-            onChange={(event) =>
-              setNewEntry({ ...newEntry, visibility: event.target.value })
-            }
-          />
+          visibility{" "}
+          {visibilityOptions.map((o) => (
+            <RadioButton
+              key={o}
+              name={o}
+              checkedValue={newEntry.visibility}
+              handleChange={(event) =>
+                setNewEntry({ ...newEntry, visibility: event.target.value })
+              }
+            />
+          ))}
         </div>
         <div>
-          weather
-          <input
-            value={newEntry.weather}
-            onChange={(event) =>
-              setNewEntry({ ...newEntry, weather: event.target.value })
-            }
-          />
+          weather{" "}
+          {weatherOptions.map((o) => (
+            <RadioButton
+              key={o}
+              name={o}
+              checkedValue={newEntry.weather}
+              handleChange={(event) =>
+                setNewEntry({ ...newEntry, weather: event.target.value })
+              }
+            />
+          ))}
         </div>
         <div>
           comment
