@@ -11,16 +11,10 @@ const VISIBILITY_OPTIONS = ["great", "good", "ok", "poor"];
 const WEATHER_OPTIONS = ["sunny", "rainy", "cloudy", "stormy", "windy"];
 
 const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
-  const [newEntry, dispatch] = useNewEntryForm();
+  const { formState: newEntry, changeValue, clearForm } = useNewEntryForm();
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    dispatch({
-      type: "change_value",
-      payload: {
-        inputName: event.target.name,
-        inputValue: event.target.value,
-      },
-    });
+    changeValue(event.target.name, event.target.value);
   };
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
@@ -30,7 +24,7 @@ const NewEntryForm = ({ errorMessage, onNewEntry }: NewEntryFormProps) => {
 
     onNewEntry(newEntry);
 
-    dispatch({ type: "clear_form" });
+    clearForm();
   };
 
   return (

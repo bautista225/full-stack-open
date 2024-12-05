@@ -13,7 +13,7 @@ const RadioButton = ({
 }: RadioButtonProps) => {
   return (
     <label>
-      {name}{" "}
+      {value}{" "}
       <input
         type="radio"
         id={value}

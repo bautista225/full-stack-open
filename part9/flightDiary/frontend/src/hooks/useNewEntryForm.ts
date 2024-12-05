@@ -1,4 +1,4 @@
-import { useReducer } from "react";
+import { useCallback, useReducer } from "react";
 import { NewDiaryEntry } from "../types";
 
 type FormReducerAction =
@@ -37,7 +37,21 @@ const formReducer = (
 };
 
 const useNewEntryForm = () => {
-  return useReducer(formReducer, INITIAL_STATE);
+  const [inputValues, dispatch] = useReducer(formReducer, INITIAL_STATE);
+
+  const clearForm = useCallback(() => dispatch({ type: "clear_form" }), []);
+
+  const changeValue = useCallback(
+    (inputName: string, inputValue: string) =>
+      dispatch({ type: "change_value", payload: { inputName, inputValue } }),
+    []
+  );
+
+  return {
+    formState: inputValues,
+    changeValue,
+    clearForm,
+  };
 };
 
 export default useNewEntryForm;
