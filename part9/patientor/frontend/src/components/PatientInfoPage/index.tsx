@@ -58,6 +58,23 @@ const PatientInfoPage = () => {
       </Typography>
       <Typography variant="body1">ssn: {patient.ssn}</Typography>
       <Typography variant="body1">occupation: {patient.occupation}</Typography>
+      <Typography variant="h5" fontWeight={"bold"} marginY={3}>
+        entries
+      </Typography>
+      {patient.entries.map((e) => (
+        <Box key={e.id}>
+          <Typography variant="body1">
+            {e.date} <em>{e.description}</em>
+          </Typography>
+          <ul>
+            {e.diagnosisCodes?.map((code) => (
+              <li key={code}>
+                <Typography variant="body1">{code}</Typography>
+              </li>
+            ))}
+          </ul>
+        </Box>
+      ))}
     </Box>
   );
 };
