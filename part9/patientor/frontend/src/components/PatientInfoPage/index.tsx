@@ -1,15 +1,17 @@
 import { useEffect, useState } from "react";
-import { Patient } from "../../types";
+import { Diagnosis, Patient } from "../../types";
 import patientService from "../../services/patients";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Typography } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
+import diagnoseService from "../../services/diagnoses";
 
 const PatientInfoPage = () => {
   const [error, setError] = useState<string>();
   const [patient, setPatient] = useState<Patient>();
+  const [diagnosis, setDiagnosis] = useState<Diagnosis[]>();
   const { id: patientId } = useParams<{ id: string }>();
 
   useEffect(() => {
@@ -33,6 +35,28 @@ const PatientInfoPage = () => {
       }
     }
   }, [patientId]);
+
+  useEffect(() => {
+    try {
+      diagnoseService.getAll().then((diagnosis) => setDiagnosis(diagnosis));
+    } catch (e: unknown) {
+      if (axios.isAxiosError(e)) {
+        if (e?.response?.data && typeof e?.response?.data === "string") {
+          const message = e.response.data.replace(
+            "Something went wrong. Error: ",
+            ""
+          );
+          console.error(message);
+          setError(message);
+        } else {
+          setError("Unrecognized axios error");
+        }
+      } else {
+        console.error("Unknown error", e);
+        setError("Unknown error");
+      }
+    }
+  }, []);
 
   if (error)
     return (
@@ -69,7 +93,9 @@ const PatientInfoPage = () => {
           <ul>
             {e.diagnosisCodes?.map((code) => (
               <li key={code}>
-                <Typography variant="body1">{code}</Typography>
+                <Typography variant="body1">
+                  {code} {diagnosis?.find((d) => d.code === code)?.name}
+                </Typography>
               </li>
             ))}
           </ul>
