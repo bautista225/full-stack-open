@@ -38,19 +38,28 @@ interface HospitalEntry extends BaseEntry {
   };
 }
 
+export interface SickLeave {
+  startDate: string;
+  endDate: string;
+}
+
 interface OccupationalHealthCareEntry extends BaseEntry {
   type: "OccupationalHealthcare";
   employerName: string;
-  sickLeave?: {
-    startDate: string;
-    endDate: string;
-  };
+  sickLeave?: SickLeave;
 }
 
 export type Entry =
   | HospitalEntry
   | OccupationalHealthCareEntry
   | HealthCheckEntry;
+
+// Define omit especial para uniones
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+// Define Entry sin la propiedad 'id'
+export type NewEntry = UnionOmit<Entry, "id">;
 
 export interface Patient {
   id: string;

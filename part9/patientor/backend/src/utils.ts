@@ -1,8 +1,17 @@
-import { NewPatient, Gender } from "./services/types";
+import {
+  NewPatient,
+  Gender,
+  NewEntry,
+  Diagnose,
+  HealthCheckRating,
+  SickLeave,
+} from "./services/types";
 
 const isString = (text: unknown): text is string => {
   return typeof text === "string" || text instanceof String;
 };
+
+const isNumber = (text: unknown): text is number => !isNaN(Number(text));
 
 const isDate = (date: string): boolean => {
   return Boolean(Date.parse(date));
@@ -46,7 +55,7 @@ const parseOccupation = (occupation: unknown): string => {
   return occupation;
 };
 
-const toNewPatient = (object: unknown): NewPatient => {
+export const toNewPatient = (object: unknown): NewPatient => {
   if (!object || typeof object !== "object")
     throw new Error("Incorrect or missing data");
 
@@ -72,4 +81,114 @@ const toNewPatient = (object: unknown): NewPatient => {
   throw new Error("Incorrect data: some fields are missing");
 };
 
-export default toNewPatient;
+const parseDiagnosisCodes = (object: unknown): Array<Diagnose["code"]> => {
+  if (!object || typeof object !== "object" || !("diagnosisCodes" in object)) {
+    // we will just trust the data to be in correct form
+    return [] as Array<Diagnose["code"]>;
+  }
+
+  return object.diagnosisCodes as Array<Diagnose["code"]>;
+};
+
+const parseString = (data: unknown): string => {
+  if (!isString(data)) {
+    throw new Error("Incorrect or missing data");
+  }
+
+  return data;
+};
+
+const parseDate = (date: unknown): string => {
+  if (!isString(date) || !isDate(date))
+    throw new Error("Incorrect or missing dateOfBirth");
+
+  return date;
+};
+
+const parseHealthCheckRating = (rating: unknown): HealthCheckRating => {
+  if (!isNumber(rating)) {
+    throw new Error("Health check rating is not a number");
+  }
+  if (rating < 0 || rating > 3) {
+    throw new Error("Health check rating is out of range");
+  }
+  return rating;
+};
+
+const parseSickLeave = (object: unknown): SickLeave | undefined => {
+  if (
+    object &&
+    typeof object === "object" &&
+    "sickLeave" in object &&
+    object.sickLeave !== null &&
+    typeof object.sickLeave === "object" &&
+    "startDate" in object.sickLeave &&
+    "endDate" in object.sickLeave
+  ) {
+    return {
+      startDate: parseDate(object.sickLeave.startDate),
+      endDate: parseDate(object.sickLeave.endDate),
+    };
+  }
+  return undefined;
+};
+
+export const toNewEntry = (object: unknown): NewEntry => {
+  if (!object || typeof object !== "object")
+    throw new Error("Incorrect or missing data");
+
+  if (
+    "description" in object &&
+    "date" in object &&
+    "specialist" in object &&
+    "diagnosisCodes" in object &&
+    "type" in object
+  ) {
+    const newEntry = {
+      description: parseString(object.description),
+      date: parseDate(object.date),
+      specialist: parseString(object.specialist),
+      diagnosisCodes: parseDiagnosisCodes(object),
+    };
+
+    switch (object.type) {
+      case "HealthCheck":
+        if ("healthCheckRating" in object)
+          return {
+            ...newEntry,
+            type: "HealthCheck",
+            healthCheckRating: parseHealthCheckRating(object.healthCheckRating),
+          };
+        break;
+      case "OccupationalHealthcare":
+        if ("employerName" in object) {
+          return {
+            ...newEntry,
+            type: "OccupationalHealthcare",
+            employerName: parseString(object.employerName),
+            sickLeave: parseSickLeave(object),
+          };
+        }
+        break;
+      case "Hospital":
+        if (
+          "discharge" in object &&
+          typeof object.discharge === "object" &&
+          object.discharge !== null &&
+          "date" in object.discharge &&
+          "criteria" in object.discharge
+        )
+          return {
+            ...newEntry,
+            type: "Hospital",
+            discharge: {
+              date: parseDate(object.discharge.date),
+              criteria: parseString(object.discharge.criteria),
+            },
+          };
+        break;
+    }
+  }
+
+  throw new Error("Incorrect data: some fields are missing");
+};
