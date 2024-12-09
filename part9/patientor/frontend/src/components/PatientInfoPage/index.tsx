@@ -43,28 +43,22 @@ const PatientInfoPage = () => {
 
   if (!patient)
     return (
-      <div>
-        <Box>
-          <Typography variant="h4" marginY={3}>
-            Patient not found
-          </Typography>
-        </Box>
-      </div>
+      <Box>
+        <Typography variant="h4" marginY={3}>
+          Patient not found
+        </Typography>
+      </Box>
     );
 
   return (
-    <div>
-      <Box>
-        <Typography variant="h4" fontWeight={"bold"} marginY={3}>
-          {patient.name}{" "}
-          {patient.gender === "male" ? <MaleIcon /> : <FemaleIcon />}
-        </Typography>
-        <Typography variant="body1">ssn: {patient.ssn}</Typography>
-        <Typography variant="body1">
-          occupation: {patient.occupation}
-        </Typography>
-      </Box>
-    </div>
+    <Box>
+      <Typography variant="h4" fontWeight={"bold"} marginY={3}>
+        {patient.name}{" "}
+        {patient.gender === "male" ? <MaleIcon /> : <FemaleIcon />}
+      </Typography>
+      <Typography variant="body1">ssn: {patient.ssn}</Typography>
+      <Typography variant="body1">occupation: {patient.occupation}</Typography>
+    </Box>
   );
 };
 
