@@ -71,7 +71,7 @@ const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
           label="Healthcheck rating"
           fullWidth
           value={healthCheckRating}
-          onChange={({ target }) => setHealthCheckRating(Number(target.value))}
+          onChange={({ target }) => setHealthCheckRating(target.value)}
         />
         <TextField
           variant="standard"
