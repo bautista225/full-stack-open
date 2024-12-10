@@ -24,16 +24,20 @@ const PatientInfoPage = () => {
         );
         console.error(message);
         setError(message);
+        setTimeout(() => setError(""), 5000);
       } else if (e?.response?.data && e?.response?.data.Error) {
         const message = e.response.data.Error;
         console.error(message);
         setError(message);
+        setTimeout(() => setError(""), 5000);
       } else {
         setError("Unrecognized axios error");
+        setTimeout(() => setError(""), 5000);
       }
     } else {
       console.error("Unknown error", e);
       setError("Unknown error");
+      setTimeout(() => setError(""), 5000);
     }
   };
 
