@@ -1,30 +1,45 @@
 import { useState } from "react";
-import { EntryType, NewEntry } from "../../types";
+import { EntryType, HealthCheckRating, NewEntry, Diagnosis } from "../../types";
 import {
   Box,
   Button,
+  Chip,
   FormControl,
   Grid,
   InputLabel,
   MenuItem,
+  OutlinedInput,
   Select,
   SelectChangeEvent,
   TextField,
   Typography,
 } from "@mui/material";
+import CancelIcon from "@mui/icons-material/Cancel";
 
 interface Props {
   onSubmit: (newEntry: NewEntry) => void;
   onCancel: () => void;
+  diagnoses: Diagnosis[];
 }
 
-const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
+const ITEM_HEIGHT = 48;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 4.5 + ITEM_PADDING_TOP,
+      width: 250,
+    },
+  },
+};
+
+const NewHealthCheckEntryForm = ({ onSubmit, onCancel, diagnoses }: Props) => {
   const [typeOfEntry, setTypeOfEntry] = useState<string>();
   const [description, setDescription] = useState<string>();
   const [date, setDate] = useState<string>();
   const [specialist, setSpecialist] = useState<string>();
   const [healthCheckRating, setHealthCheckRating] = useState<string>();
-  const [diagnosisCodes, setDiagnosisCodes] = useState<string>();
+  const [diagnosisCodes, setDiagnosisCodes] = useState<string[]>([]);
   const [dischargeDate, setDischargeDate] = useState<string>();
   const [dischargeCriteria, setDischargeCriteria] = useState<string>();
   const [employerName, setEmployerName] = useState<string>();
@@ -36,7 +51,7 @@ const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
     setDate("");
     setSpecialist("");
     setHealthCheckRating("");
-    setDiagnosisCodes("");
+    setDiagnosisCodes([]);
     setDischargeDate("");
     setDischargeCriteria("");
     setEmployerName("");
@@ -61,7 +76,7 @@ const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
       description,
       date,
       specialist,
-      diagnosisCodes: diagnosisCodes?.replace(" ", "").split(","),
+      diagnosisCodes,
     };
 
     switch (typeOfEntry) {
@@ -120,7 +135,6 @@ const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
             ))}
           </Select>
         </FormControl>
-
         <TextField
           sx={{ my: 1 }}
           variant="standard"
@@ -147,24 +161,79 @@ const NewHealthCheckEntryForm = ({ onSubmit, onCancel }: Props) => {
           value={specialist}
           onChange={({ target }) => setSpecialist(target.value)}
         />
-        <TextField
-          sx={{ my: 1 }}
-          variant="standard"
-          label="Diagnosis codes"
-          fullWidth
-          value={diagnosisCodes}
-          onChange={({ target }) => setDiagnosisCodes(target.value)}
-        />
+        <FormControl sx={{ mt: 1 }} fullWidth>
+          <InputLabel id="diagnoseSelect">Diagnosis codes</InputLabel>
+          <Select
+            label="Diagnosis codes"
+            labelId="diagnoseSelect"
+            multiple
+            value={diagnosisCodes}
+            onChange={({ target }) =>
+              setDiagnosisCodes(
+                typeof target.value === "string"
+                  ? target.value.split(",")
+                  : target.value
+              )
+            }
+            input={
+              <OutlinedInput
+                id="select-diagnoseSelect"
+                label="Diagnosis codes"
+              />
+            }
+            renderValue={(selected) => (
+              <Box sx={{ display: "flex", flexWrap: "wrap", gap: 0.5 }}>
+                {selected.map((value) => (
+                  <Chip
+                    key={value}
+                    label={value}
+                    onDelete={() =>
+                      setDiagnosisCodes(
+                        diagnosisCodes.filter((item) => item !== value)
+                      )
+                    }
+                    deleteIcon={
+                      <CancelIcon
+                        onMouseDown={(event) => event.stopPropagation()}
+                      />
+                    }
+                  />
+                ))}
+              </Box>
+            )}
+            MenuProps={MenuProps}
+          >
+            {diagnoses.map((d) => (
+              <MenuItem key={d.code} value={d.code}>
+                {d.code} {d.name}
+              </MenuItem>
+            ))}
+          </Select>
+        </FormControl>
         {typeOfEntry === EntryType.HealthCheck && (
-          <TextField
-            sx={{ my: 1 }}
-            type="number"
-            variant="standard"
-            label="Healthcheck rating"
-            fullWidth
-            value={healthCheckRating}
-            onChange={({ target }) => setHealthCheckRating(target.value)}
-          />
+          <FormControl fullWidth sx={{ my: 1 }}>
+            <InputLabel id="healthcheckRating">Healthcheck rating</InputLabel>
+            <Select
+              label="Healthcheck rating"
+              labelId="healthcheckRating"
+              fullWidth
+              value={healthCheckRating}
+              onChange={({ target }) => setHealthCheckRating(target.value)}
+            >
+              {Object.keys(HealthCheckRating)
+                .filter((key) => isNaN(Number(key)))
+                .map((key) => (
+                  <MenuItem
+                    key={key}
+                    value={
+                      HealthCheckRating[key as keyof typeof HealthCheckRating]
+                    }
+                  >
+                    {key}
+                  </MenuItem>
+                ))}
+            </Select>
+          </FormControl>
         )}
         {typeOfEntry === EntryType.Hospital && (
           <>

@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
-import { NewEntry, Patient } from "../../types";
+import { Diagnosis, NewEntry, Patient } from "../../types";
 import patientService from "../../services/patients";
+import diagnoseService from "../../services/diagnoses";
 import axios from "axios";
 import { useParams } from "react-router-dom";
 import { Alert, Box, Button, Typography } from "@mui/material";
@@ -13,6 +14,7 @@ const PatientInfoPage = () => {
   const [error, setError] = useState<string>();
   const [patient, setPatient] = useState<Patient>();
   const [showForm, setShowForm] = useState(false);
+  const [diagnosisCodes, setDiagnosisCodes] = useState<Diagnosis[]>([]);
   const { id: patientId } = useParams<{ id: string }>();
 
   const handleError = (e: unknown) => {
@@ -44,6 +46,16 @@ const PatientInfoPage = () => {
   useEffect(() => {
     try {
       patientService.get(patientId).then((patient) => setPatient(patient));
+    } catch (e: unknown) {
+      handleError(e);
+    }
+  }, [patientId]);
+
+  useEffect(() => {
+    try {
+      diagnoseService
+        .getAll()
+        .then((diagnoseCodes) => setDiagnosisCodes(diagnoseCodes));
     } catch (e: unknown) {
       handleError(e);
     }
@@ -95,6 +107,7 @@ const PatientInfoPage = () => {
           <NewHealthCheckEntryForm
             onSubmit={handleNewHealthCheckEntry}
             onCancel={() => setShowForm(false)}
+            diagnoses={diagnosisCodes}
           />
         )}
       </Box>
