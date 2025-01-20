@@ -1,0 +1,7 @@
+Script started on 2025-01-17 09:45:50+01:00 [TERM="xterm-256color" TTY="/dev/pts/4" COLUMNS="129" LINES="22"]
+[?2004h]0;jbgarcia@DESKTOP-TQLIVSB: /mnt/c/Users/Juan/GitHub/part12-containers-applications[01;32mjbgarcia@DESKTOP-TQLIVSB[00m:[01;34m/mnt/c/Users/Juan/GitHub/part12-containers-applications[00m$ echo 'hello'
+[?2004lhello
+[?2004h]0;jbgarcia@DESKTOP-TQLIVSB: /mnt/c/Users/Juan/GitHub/part12-containers-applications[01;32mjbgarcia@DESKTOP-TQLIVSB[00m:[01;34m/mnt/c/Users/Juan/GitHub/part12-containers-applications[00m$ exit
+[?2004lexit
+
+Script done on 2025-01-17 09:46:12+01:00 [COMMAND_EXIT_CODE="0"]

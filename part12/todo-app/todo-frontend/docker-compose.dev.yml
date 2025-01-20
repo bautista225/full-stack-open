@@ -1,0 +1,13 @@
+services:
+  app:
+    image: todo-front-dev
+    build:
+      context: . # El contexto tomará este directorio como el "contexto del build"
+      dockerfile: dev.Dockerfile # Esto simplemente le indicará qué dockerfile leer
+    environment:
+      - VITE_BACKEND_URL=http://localhost:3000
+    volumes:
+      - ./:/usr/src/app # La ruta puede ser relativa, por lo que ./ es suficiente para decir "la misma ubicación que el docker-compose.yml"
+    ports:
+      - 5173:5173
+    container_name: todo-front-dev # Esto nombrará el contenedor como todo-front-dev
