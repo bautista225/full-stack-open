@@ -95,7 +95,7 @@ In this section, the tools introduced earlier to add end-to-end functionality wi
 
 ### Part 10 - React Native
 
-Still in development...
+Under development...
 
 ### [Part 11 - CI/CD](https://github.com/bautista225/full-stack-open-part11-own-pipeline)
 
