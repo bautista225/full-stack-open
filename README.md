@@ -94,5 +94,13 @@ In this section, the tools introduced earlier to add end-to-end functionality wi
 - [patientor](/part9/patientor/)
 
 ### Part 10 - React Native
-### Part 11 - CI/CD
-### Part 12 - Containers
+
+Still in development...
+
+### [Part 11 - CI/CD}(/part11/)
+
+This section implements Github Workflows on some previous projects, applying different pipelines to check format and testing. Then, some projects are deployed to the web through Render.
+
+### [Part 12 - Containers](/part12/)
+
+This section deploys some previous projects using Docker containers.
