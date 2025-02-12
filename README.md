@@ -97,7 +97,7 @@ In this section, the tools introduced earlier to add end-to-end functionality wi
 
 Still in development...
 
-### [Part 11 - CI/CD}(/part11/)
+### [Part 11 - CI/CD](https://github.com/bautista225/full-stack-open-part11-own-pipeline)
 
 This section implements Github Workflows on some previous projects, applying different pipelines to check format and testing. Then, some projects are deployed to the web through Render.
 
